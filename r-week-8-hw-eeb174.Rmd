@@ -1,0 +1,93 @@
+---
+title: "week-8-hw-eeb174"
+author: "Laura Trejo"
+date: "March 8, 2017"
+output: md_document
+---
+```{r}
+#Exploring Data Frames 
+#challenge1
+df <- data.frame(first = c('Grace'),last = c('Hopper'),lucky_number = c(0),stringsAsFactors = FALSE)
+df <- rbind(df, list('Marie', 'Curie', 238) )
+df <- cbind(df, coffeetime = c(TRUE,TRUE))
+
+#challenge2
+download.file("https://raw.githubusercontent.com/swcarpentry/r-novice-gapminder/gh-pages/_episodes_rmd/data/gapminder-FiveYearData.csv", destfile = "data/gapminder-FiveYearData.csv")
+gapminder <- read.csv(file = "data/gapminder-FiveYearData.csv")
+source(file = "scripts/load-gapminder.R")
+
+#challenge3
+#country and continet are factors
+#year is an integer value 
+#pop, lifeEXP, and gdpPercap are numeric vectors 
+
+#Subsetting Data 
+
+#Challege1
+x[2:4]
+x[-c(1,5)]
+x[c("b", "c", "d")]
+x[c(2,3,4)]
+
+#challenge2
+x <- c(5.4, 6.2, 7.1, 4.8, 7.5)
+names(x) <- c('a', 'b', 'c', 'd', 'e')
+print(x)
+x[-which(names(x) == "g")]
+#A and C are correct 
+
+#challenge3
+x <- c(5.4, 6.2, 7.1, 4.8, 7.5)
+names(x) <- c('a', 'b', 'c', 'd', 'e')
+print(x)
+x_subset <- x[x<7 & x>4]
+print(x_subset)
+
+#challenge4 
+m <- matrix(1:18, nrow=3, ncol=6)
+print(m)
+m[2,c(4,5)]
+
+#challenge5 
+xlist <- list(a = "Software Carpentry", b = 1:10, data = head(iris))
+xlist$b[2]
+
+#challenge6
+mod <- aov(pop ~ lifeExp, data=gapminder)
+attributes(mod) ## `df.residual` is one of the names of `mod`
+mod$df.residual
+
+#challenge7
+gapminder[gapminder$year == 1957,]
+gapminder[,-c(1:4)]
+gapminder[gapminder$lifeExp > 80,]
+gapminder[1, c(4, 5)]
+gapminder[gapminder$year == 2002 | gapminder$year == 2007,]
+gapminder[gapminder$year %in% c(2002, 2007),]
+
+#challenge8
+#gapminder is a data.frame so needs to be subsetted on two dimensions. gapminder[1:20, ] subsets the data to give the first 20 rows and all columns.
+gapminder_small <- gapminder[c(1:9, 19:23),]
+
+#Creatign Publication-Quality Graphics 
+#Challenge1
+ggplot(data = gapminder, aes(x = year, y = lifeExp)) + geom_point()
+#challenge2
+ggplot(data = gapminder, aes(x = year, y = lifeExp, color=continent)) +geom_point()
+#challenge3
+ggplot(data = gapminder, aes(x=year, y=lifeExp, by=country)) +
+ geom_point() + geom_line(aes(color=continent))
+#challenge4a
+ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp)) +
+ geom_point(size=3, color="orange") + scale_x_log10() +
+ geom_smooth(method="lm", size=1.5)
+#challenge4b
+ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp, color = continent)) +
+geom_point(size=3, pch=17) + scale_x_log10() +
+geom_smooth(method="lm", size=1.5)
+#challenge5
+ggplot(data = gapminder, aes(x = gdpPercap, fill=continent)) +
+ geom_density(alpha=0.6) + facet_wrap( ~ year) + scale_x_log10()
+
+
+```
